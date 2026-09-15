@@ -1,166 +1,2955 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#050505">
-<title>PisoWiFi — Online Payment</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BSCS - 1A</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
 <style>
 :root{
-  --bg:#050505;--panel:#0d0d0e;--panel2:#121214;--line:#252528;
-  --text:#f5f5f5;--muted:#99999f;--accent:#b8ff38;
+  --orange:#ea580c;
+  --orange-soft:#fff1e6;
+  --ink:#161c2b;
+  --muted:#69728a;
+  --line:#e6e9f0;
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --green:#158a53;
+  --green-bg:#e5f8ee;
+  --amber:#a4590b;
+  --amber-bg:#fef1dc;
+  --red:#c23a3a;
+  --red-bg:#fdeaea;
+  --blue:#2454c7;
+  --blue-bg:#eaf2ff;
+  --shadow:0 8px 24px rgba(22,28,43,.06);
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
 body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"DM Sans",sans-serif;
   -webkit-font-smoothing:antialiased;
 }
-body:before{
-  content:"";position:fixed;inset:0;pointer-events:none;opacity:.045;
-  background-image:radial-gradient(#fff .55px,transparent .55px);background-size:5px 5px;
+
+h1,h2,h3{
+  font-family:"Space Grotesk",sans-serif;
+  margin:0;
 }
-.wrap{width:min(1080px,calc(100% - 28px));margin:auto}
-.nav{
-  height:72px;display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid #171719;
+
+button,
+input{
+  font:inherit;
 }
-.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.4px}
-.brandmark{
-  width:34px;height:34px;border-radius:10px;background:var(--accent);color:#050505;
-  display:grid;place-items:center;font-size:19px;font-weight:950;transform:rotate(-8deg)
+
+button{
+  cursor:pointer;
+  border:0;
 }
-.badge{
-  border:1px solid #29292c;border-radius:999px;padding:8px 11px;
-  color:#bdbdc2;font-size:11px;font-weight:750;letter-spacing:.5px;
+
+.hidden{
+  display:none!important;
 }
-.hero{padding:72px 0 42px;text-align:center}
-.kicker{
-  display:inline-flex;align-items:center;gap:7px;color:var(--accent);
-  font-size:11px;font-weight:850;letter-spacing:1.7px;text-transform:uppercase;
-  margin-bottom:19px;
+
+:focus-visible{
+  outline:2px solid var(--orange);
+  outline-offset:2px;
 }
-.kicker i{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent)}
-h1{
-  margin:0 auto;max-width:790px;font-size:clamp(42px,10vw,88px);
-  line-height:.91;letter-spacing:-5px;font-weight:900;
+
+/* =========================
+   HEADER
+========================= */
+
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:#fff;
+  border-bottom:1px solid var(--line);
 }
-h1 span{color:#77777c}
+
+.header-bar{
+  max-width:1120px;
+  margin:0 auto;
+  padding:16px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+
+.brand-mark{
+  width:40px;
+  height:40px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:var(--orange-soft);
+  font-size:20px;
+}
+
+.brand-text h1{
+  font-size:17px;
+  letter-spacing:-.2px;
+}
+
+.brand-text p{
+  margin:2px 0 0;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex:none;
+}
+
+.role{
+  font-size:12px;
+  color:var(--muted);
+  white-space:nowrap;
+}
+
+/* SEARCH */
+
+.search-bar{
+  background:#fff;
+  border-top:1px solid var(--line);
+}
+
+.search-bar-inner{
+  max-width:1120px;
+  margin:0 auto;
+  padding:12px 20px;
+}
+
+.search{
+  position:relative;
+  display:block;
+}
+
+.search input{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:var(--bg);
+  padding:12px 14px 12px 40px;
+  outline:none;
+  transition:.15s;
+}
+
+.search input:focus{
+  border-color:var(--orange);
+  background:#fff;
+  box-shadow:0 0 0 3px var(--orange-soft);
+}
+
+.search:before{
+  content:"";
+  position:absolute;
+  left:13px;
+  top:50%;
+  width:14px;
+  height:14px;
+  transform:translateY(-50%);
+  border:2px solid var(--muted);
+  border-radius:50%;
+  box-sizing:border-box;
+}
+
+.search:after{
+  content:"";
+  position:absolute;
+  left:25px;
+  top:calc(50% + 6px);
+  width:7px;
+  height:2px;
+  background:var(--muted);
+  transform:rotate(45deg);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+button.btn{
+  padding:10px 15px;
+  border-radius:10px;
+  font-weight:700;
+  font-size:13px;
+  transition:transform .12s,background .12s,box-shadow .12s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+}
+
+.btn-primary{
+  background:var(--orange);
+  color:#fff;
+}
+
+.btn-primary:hover{
+  background:#d24e09;
+}
+
+.btn-outline{
+  background:transparent;
+  border:1px solid var(--line);
+  color:var(--ink);
+}
+
+.btn-outline:hover{
+  background:var(--bg);
+}
+
+/* =========================
+   MAIN
+========================= */
+
+main{
+  max-width:1120px;
+  margin:0 auto;
+  padding:26px 20px 56px;
+}
+
+.hero{
+  margin-bottom:20px;
+}
+
+.hero h2{
+  font-size:25px;
+  letter-spacing:-.4px;
+}
+
 .hero p{
-  max-width:610px;margin:25px auto 0;color:#a6a6ab;
-  font-size:15px;line-height:1.65;
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:14px;
 }
-.cta{
-  margin:28px auto 0;display:inline-flex;align-items:center;gap:8px;
-  background:var(--accent);color:#050505;text-decoration:none;
-  border-radius:12px;padding:14px 18px;font-size:13px;font-weight:900;
-  box-shadow:0 0 35px rgba(184,255,56,.08);
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-bottom:20px;
 }
-.cta b{font-size:16px}
-.section{padding:34px 0 70px}
-.sectionhead{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:15px}
-.eyebrow{font-size:10px;color:#6f6f74;letter-spacing:1.8px;text-transform:uppercase;font-weight:850}
-h2{font-size:28px;letter-spacing:-1.5px;margin:7px 0 0}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+
+.stat{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:600;
+}
+
+.stat-value{
+  font-family:"Space Grotesk",sans-serif;
+  font-weight:700;
+  font-size:23px;
+  margin-top:6px;
+}
+
+.stat-value.orange{
+  color:var(--orange);
+}
+
+.stat-value.green{
+  color:var(--green);
+}
+
+/* =========================
+   CARDS
+========================= */
+
 .card{
-  min-height:225px;background:linear-gradient(145deg,#111113,#0a0a0b);
-  border:1px solid var(--line);border-radius:20px;padding:22px;
-  display:flex;flex-direction:column;justify-content:space-between;
-  transition:.25s ease;position:relative;overflow:hidden;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
 }
-.card:after{
-  content:"";position:absolute;width:130px;height:130px;right:-60px;top:-60px;
-  border-radius:50%;background:var(--glow);filter:blur(35px);opacity:.11;
+
+.card + .card{
+  margin-top:22px;
 }
-.card:hover{transform:translateY(-3px);border-color:#39393d}
-.logo{height:55px;display:flex;align-items:center}
-.logo svg{width:145px;max-height:52px}
-.card h3{font-size:17px;margin:18px 0 4px;letter-spacing:-.4px}
-.card p{margin:0;color:#77777e;font-size:12px}
-.status{
-  margin-top:35px;border:1px solid #202022;background:#0b0b0c;border-radius:16px;
-  padding:18px;display:flex;align-items:center;gap:13px;
+
+.card-head{
+  padding:16px 20px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
 }
-.statusdot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent);flex:none}
-.status strong{font-size:12px}.status small{display:block;color:#707076;margin-top:3px;font-size:11px}
-.footer{border-top:1px solid #18181a;padding:24px 0 35px;color:#5f5f65;font-size:10px;text-align:center}
-@media(max-width:650px){
-  .wrap{width:min(100% - 20px,520px)}
-  .nav{height:64px}.brand{font-size:14px}.badge{font-size:9px}
-  .hero{padding:57px 0 30px}
-  h1{letter-spacing:-3px;font-size:clamp(42px,14vw,70px)}
-  .hero p{font-size:13px;margin-top:20px}
-  .section{padding-bottom:48px}.grid{grid-template-columns:1fr;gap:9px}
-  .card{min-height:145px;padding:18px;flex-direction:row;align-items:center;gap:15px}
-  .card .logo{height:42px;min-width:125px}
-  .card h3{margin:0 0 4px;font-size:15px}.card p{font-size:11px}
-  .card:after{width:100px;height:100px}
+
+.card-head h3{
+  font-size:16px;
+}
+
+.card-head .sub-label{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+.card-head .count{
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* =========================
+   ADMIN SECTION
+========================= */
+
+/*
+  IMPORTANT:
+  Admin is now BEFORE Public View.
+*/
+
+#admin-view{
+  margin-top:0;
+  margin-bottom:24px;
+}
+
+.admin-banner{
+  background:var(--orange-soft);
+  border:1px solid #fdd8ae;
+  border-radius:12px;
+  padding:13px 16px;
+  margin-bottom:16px;
+  color:#8a4109;
+  font-size:13px;
+}
+
+.admin-card{
+  overflow:hidden;
+}
+
+/* ADMIN DESKTOP TABLE */
+
+.admin-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.admin-table th{
+  text-align:left;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:600;
+  padding:12px 16px;
+  background:#fbfcfe;
+  white-space:nowrap;
+}
+
+.admin-table td{
+  padding:13px 16px;
+  border-top:1px solid #eef0f5;
+  font-size:13px;
+  vertical-align:middle;
+}
+
+.admin-table .person{
+  font-weight:700;
+}
+
+.admin-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:7px;
+  white-space:nowrap;
+}
+
+.icon-btn{
+  border-radius:8px;
+  padding:8px 11px;
+  font-size:12px;
+  font-weight:700;
+  transition:.15s;
+}
+
+.icon-btn:hover{
+  transform:translateY(-1px);
+}
+
+.icon-btn.edit{
+  background:var(--blue-bg);
+  color:var(--blue);
+}
+
+.icon-btn.edit:hover{
+  background:#dce9ff;
+}
+
+.icon-btn.delete{
+  background:var(--red-bg);
+  color:var(--red);
+}
+
+.icon-btn.delete:hover{
+  background:#fbdada;
+}
+
+/* =========================
+   MOBILE ADMIN CARDS
+========================= */
+
+.admin-mobile-list{
+  display:none;
+}
+
+.admin-mobile-card{
+  padding:15px 16px;
+  border-top:1px solid #eef0f5;
+}
+
+.admin-mobile-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.admin-mobile-name{
+  font-weight:800;
+  font-size:15px;
+  line-height:1.3;
+}
+
+.admin-mobile-details{
+  margin-top:12px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.admin-detail{
+  background:var(--bg);
+  border-radius:9px;
+  padding:9px 10px;
+}
+
+.admin-detail-label{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.3px;
+  margin-bottom:2px;
+}
+
+.admin-detail-value{
+  font-size:13px;
+  font-weight:700;
+}
+
+.admin-mobile-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:13px;
+}
+
+.admin-mobile-actions button{
+  padding:10px;
+  border-radius:9px;
+  font-size:12px;
+  font-weight:800;
+}
+
+/* =========================
+   PUBLIC TABLE
+========================= */
+
+.public-card{
+  margin-top:0;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th{
+  text-align:left;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:600;
+  padding:12px 20px;
+  background:#fbfcfe;
+}
+
+td{
+  padding:14px 20px;
+  border-top:1px solid #eef0f5;
+  font-size:14px;
+  vertical-align:middle;
+}
+
+.person{
+  font-weight:700;
+}
+
+.sub{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+.amount{
+  font-weight:700;
+}
+
+.balance{
+  color:var(--red);
+  font-weight:700;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 10px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.badge.paid{
+  color:var(--green);
+  background:var(--green-bg);
+}
+
+.badge.partial{
+  color:var(--amber);
+  background:var(--amber-bg);
+}
+
+.badge.unpaid{
+  color:var(--red);
+  background:var(--red-bg);
+}
+
+.empty{
+  text-align:center;
+  padding:46px 20px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+/* =========================
+   MODALS
+========================= */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(15,20,32,.55);
+  backdrop-filter:blur(4px);
+  display:grid;
+  place-items:center;
+  padding:18px;
+  z-index:100;
+}
+
+.modal{
+  width:min(100%,500px);
+  background:#fff;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 25px 70px rgba(15,20,32,.35);
+  max-height:calc(100vh - 30px);
+  overflow:auto;
+}
+
+.modal h2{
+  font-size:19px;
+}
+
+.modal > p{
+  margin:5px 0 18px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.fields{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+.field label{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  color:#4c5670;
+  margin:0 0 6px;
+}
+
+.field input{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:11px 12px;
+  outline:none;
+  background:var(--bg);
+}
+
+.field input:focus{
+  border-color:var(--orange);
+  background:#fff;
+  box-shadow:0 0 0 3px var(--orange-soft);
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:20px;
+}
+
+.notice{
+  font-size:12px;
+  color:var(--muted);
+  background:var(--bg);
+  padding:10px 12px;
+  border-radius:9px;
+  margin-top:14px;
+  line-height:1.5;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  position:fixed;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:200;
+  padding:11px 18px;
+  background:var(--ink);
+  color:#fff;
+  border-radius:10px;
+  font-weight:600;
+  font-size:13px;
+  box-shadow:var(--shadow);
+  max-width:calc(100% - 30px);
+  text-align:center;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:720px){
+
+  .header-bar{
+    padding:13px 16px;
+  }
+
+  .brand-mark{
+    width:36px;
+    height:36px;
+    border-radius:10px;
+    font-size:17px;
+  }
+
+  .brand-text h1{
+    font-size:15px;
+  }
+
+  .brand-text p{
+    display:none;
+  }
+
+  .role{
+    display:none;
+  }
+
+  .header-actions{
+    gap:6px;
+  }
+
+  .header-actions .btn{
+    padding:8px 10px;
+    font-size:11px;
+  }
+
+  .search-bar-inner{
+    padding:10px 16px;
+  }
+
+  main{
+    padding:18px 14px 40px;
+  }
+
+  .hero h2{
+    font-size:21px;
+  }
+
+  .hero p{
+    font-size:13px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+    margin-bottom:16px;
+  }
+
+  .stat{
+    padding:12px;
+    border-radius:12px;
+  }
+
+  .stat-value{
+    font-size:19px;
+    margin-top:5px;
+  }
+
+  .card{
+    border-radius:14px;
+  }
+
+  .card-head{
+    padding:14px 16px;
+  }
+
+  .card-head h3{
+    font-size:15px;
+  }
+
+  .card-head .btn{
+    width:100%;
+  }
+
+  /* ADMIN */
+
+  .admin-banner{
+    font-size:12px;
+    line-height:1.45;
+  }
+
+  .admin-table{
+    display:none;
+  }
+
+  .admin-mobile-list{
+    display:block;
+  }
+
+  .admin-mobile-card{
+    padding:15px;
+  }
+
+  .admin-mobile-top{
+    align-items:center;
+  }
+
+  .admin-mobile-details{
+    grid-template-columns:1fr 1fr;
+  }
+
+  /* PUBLIC */
+
+  #publicRows,
+  #publicRows tr,
+  #publicRows td{
+    display:block;
+    width:100%;
+  }
+
+  .card table{
+    min-width:0;
+  }
+
+  #publicView thead{
+    display:none;
+  }
+
+  #publicRows tr{
+    position:relative;
+    padding:14px 16px 11px;
+    border-top:1px solid #eef0f5;
+  }
+
+  #publicRows td{
+    border:0;
+    padding:0;
+    margin:0 0 8px;
+  }
+
+  #publicRows td:first-child{
+    margin-bottom:12px;
+  }
+
+  #publicRows td:not(:first-child){
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:13px;
+    gap:10px;
+  }
+
+  #publicRows td:not(:first-child):before{
+    content:attr(data-label);
+    color:var(--muted);
+    font-size:11px;
+    font-weight:600;
+  }
+
+  .badge{
+    font-size:10px;
+    padding:5px 9px;
+  }
+
+  .sub{
+    font-size:11px;
+  }
+
+  /* MODAL */
+
+  .fields{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .modal{
+    padding:18px;
+    border-radius:16px;
+  }
+
+  .modal-actions{
+    position:sticky;
+    bottom:-18px;
+    background:#fff;
+    padding:12px 0 0;
+    margin-top:16px;
+  }
+
+  .modal-actions .btn{
+    flex:1;
+  }
+}
+
+/* VERY SMALL PHONES */
+
+@media(max-width:400px){
+
+  .admin-mobile-details{
+    grid-template-columns:1fr;
+  }
+
+  .admin-mobile-actions{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .brand-mark{
+    display:none;
+  }
+
+  .brand{
+    gap:0;
+  }
 }
 </style>
 </head>
+
 <body>
-<div class="wrap">
-<header class="nav">
-  <div class="brand"><div class="brandmark">⌁</div><span>PISOWIFI</span></div>
-  <div class="badge">ONLINE PAYMENT</div>
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="site-header">
+
+  <div class="header-bar">
+
+    <div class="brand">
+
+      <div class="brand-mark">👕</div>
+
+      <div class="brand-text">
+        <h1>BSCS - 1A</h1>
+        <p>barayad na kamo sa HACKATHON!!</p>
+      </div>
+
+    </div>
+
+    <div class="header-actions">
+
+      <span class="role" id="role">
+        Public view
+      </span>
+
+      <button id="loginBtn" class="btn btn-outline">
+        Admin login
+      </button>
+
+      <button id="logoutBtn" class="btn btn-outline hidden">
+        Log out
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="search-bar">
+
+    <div class="search-bar-inner">
+
+      <label class="search">
+
+        <input
+          id="search"
+          type="search"
+          placeholder="Search name, group, or codename..."
+          autocomplete="off"
+        >
+
+      </label>
+
+    </div>
+
+  </div>
+
 </header>
 
+
+<!-- =========================
+     MAIN
+========================= -->
+
 <main>
-<section class="hero">
-  <div class="kicker"><i></i> PAYMENT UPDATE</div>
-  <h1>Pay online.<br><span>Get connected.</span></h1>
-  <p>Online payment is now available for your PisoWiFi service. Choose your preferred e-wallet and enjoy a faster, more convenient way to pay.</p>
-  <a class="cta" href="#payments">View payment methods <b>↓</b></a>
-</section>
 
-<section class="section" id="payments">
-  <div class="sectionhead">
-    <div><div class="eyebrow">Accepted everywhere</div><h2>Payment methods</h2></div>
-  </div>
+  <section class="hero">
 
-  <div class="grid">
-    <article class="card" style="--glow:#2471f2">
-      <div class="logo">
-        <svg viewBox="0 0 300 90" aria-label="GCash">
-          <rect x="4" y="9" width="72" height="72" rx="21" fill="#2471F2"/>
-          <path d="M39 54c-9-1-15-7-15-16 0-10 8-17 18-17 7 0 12 3 16 8l-7 6c-2-3-5-5-9-5-5 0-9 4-9 9s4 9 9 9c3 0 5-1 7-3h-8v-8h18v4c0 9-7 17-20 13z" fill="white"/>
-          <text x="91" y="59" font-size="45" font-weight="800" font-family="Arial,sans-serif" fill="#2471F2">GCash</text>
-        </svg>
+    <h2>
+      Payment status
+    </h2>
+
+    <p>
+      Everyone can look up their name below.
+      Admins can also add, edit, or remove records.
+    </p>
+
+  </section>
+
+
+  <!-- =========================
+       STATISTICS
+  ========================= -->
+
+  <section class="stats">
+
+    <div class="stat">
+
+      <div class="stat-label">
+        Orders
       </div>
-      <div><h3>GCash</h3><p>Fast and convenient e-wallet payments.</p></div>
-    </article>
 
-    <article class="card" style="--glow:#ee4d2d">
-      <div class="logo">
-        <svg viewBox="0 0 330 90" aria-label="ShopeePay">
-          <rect x="3" y="8" width="74" height="74" rx="20" fill="#EE4D2D"/>
-          <path d="M21 31h38l-4 37H25z" fill="white"/>
-          <path d="M30 31c0-8 5-13 11-13s11 5 11 13" fill="none" stroke="white" stroke-width="6" stroke-linecap="round"/>
-          <text x="88" y="59" font-size="38" font-weight="800" font-family="Arial,sans-serif" fill="#EE4D2D">ShopeePay</text>
-        </svg>
+      <div
+        class="stat-value"
+        id="totalOrders"
+      >
+        0
       </div>
-      <div><h3>ShopeePay</h3><p>Simple payments through ShopeePay.</p></div>
-    </article>
 
-    <article class="card" style="--glow:#00b968">
-      <div class="logo">
-        <svg viewBox="0 0 300 90" aria-label="Maya">
-          <text x="4" y="61" font-size="62" font-weight="800" font-family="Arial,sans-serif" fill="#00B968">maya</text>
-        </svg>
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        Fully paid
       </div>
-      <div><h3>Maya</h3><p>Pay your PisoWiFi access with Maya.</p></div>
-    </article>
-  </div>
 
-  <div class="status">
-    <div class="statusdot"></div>
-    <div><strong>Online payment is available now</strong><small>Choose a payment method above to get started.</small></div>
-  </div>
-</section>
+      <div
+        class="stat-value green"
+        id="paidOrders"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        With balance
+      </div>
+
+      <div
+        class="stat-value orange"
+        id="balanceOrders"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        Collected
+      </div>
+
+      <div
+        class="stat-value"
+        id="collected"
+      >
+        ₱0
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       ADMIN VIEW
+       
+       MOVED ABOVE PUBLIC VIEW
+  ====================================================== -->
+
+  <section
+    id="admin-view"
+    class="hidden"
+  >
+
+    <div class="admin-banner">
+
+      <strong>Admin dashboard</strong> —
+      changes here appear in the public payment list right away.
+
+    </div>
+
+
+    <div class="card admin-card">
+
+      <div class="card-head">
+
+        <div>
+
+          <h3>
+            Manage payment records
+          </h3>
+
+          <span class="sub-label">
+            Add, edit, or delete payment records
+          </span>
+
+        </div>
+
+
+        <button
+          class="btn btn-primary"
+          id="addBtn"
+        >
+          + Add payment record
+        </button>
+
+      </div>
+
+
+      <!-- DESKTOP ADMIN TABLE -->
+
+      <table class="admin-table">
+
+        <thead>
+
+          <tr>
+
+            <th>Student</th>
+            <th>Group</th>
+            <th>Codename</th>
+            <th>Size</th>
+            <th>Price</th>
+            <th>Paid</th>
+            <th>Balance</th>
+            <th>Actions</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="adminRows"></tbody>
+
+      </table>
+
+
+      <!-- MOBILE ADMIN CARDS -->
+
+      <div
+        id="adminMobileRows"
+        class="admin-mobile-list"
+      ></div>
+
+
+      <div
+        class="empty hidden"
+        id="adminEmpty"
+      >
+        No records yet — add your first payment record above.
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       PUBLIC VIEW
+       
+       NOW BELOW ADMIN
+  ====================================================== -->
+
+  <section
+    class="card public-card"
+    id="publicView"
+  >
+
+    <div class="card-head">
+
+      <div>
+
+        <h3>
+          Payment list
+        </h3>
+
+        <span class="sub-label">
+          Public — view only
+        </span>
+
+      </div>
+
+      <span
+        class="count"
+        id="resultCount"
+      ></span>
+
+    </div>
+
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>Student</th>
+          <th>Group / codename / size</th>
+          <th>T-shirt price</th>
+          <th>Paid</th>
+          <th>Balance</th>
+          <th>Status</th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody id="publicRows"></tbody>
+
+    </table>
+
+
+    <div
+      class="empty hidden"
+      id="publicEmpty"
+    >
+      No payment records match your search.
+    </div>
+
+  </section>
+
 </main>
 
-<footer class="footer">Thank you for using our PisoWiFi service.</footer>
+
+<!-- =====================================================
+     LOGIN MODAL
+====================================================== -->
+
+<div
+  id="loginModal"
+  class="modal-backdrop hidden"
+>
+
+  <div class="modal">
+
+    <h2>
+      Admin login
+    </h2>
+
+    <p>
+      Use the Firebase administrator account to manage payments.
+    </p>
+
+
+    <div class="fields">
+
+      <div class="field full">
+
+        <label>
+          Email
+        </label>
+
+        <input
+          id="loginEmail"
+          type="email"
+          placeholder="admin@email.com"
+          autocomplete="email"
+        >
+
+      </div>
+
+
+      <div class="field full">
+
+        <label>
+          Password
+        </label>
+
+        <input
+          id="loginPassword"
+          type="password"
+          placeholder="Your password"
+          autocomplete="current-password"
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="modal-actions">
+
+      <button
+        class="btn btn-outline close-modal"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="btn btn-primary"
+        id="loginSubmit"
+      >
+        Log in
+      </button>
+
+    </div>
+
+  </div>
+
 </div>
+
+
+<!-- =====================================================
+     ADD / EDIT RECORD MODAL
+====================================================== -->
+
+<div
+  id="recordModal"
+  class="modal-backdrop hidden"
+>
+
+  <div class="modal">
+
+    <h2 id="recordTitle">
+      Add payment record
+    </h2>
+
+    <p>
+      Add the student details and payment information.
+    </p>
+
+
+    <div class="fields">
+
+      <div class="field full">
+
+        <label>
+          Student name *
+        </label>
+
+        <input
+          id="recordName"
+          placeholder="Full name"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Group name
+        </label>
+
+        <input
+          id="recordGroup"
+          placeholder="e.g. Team Orange"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Codename
+        </label>
+
+        <input
+          id="recordCodename"
+          placeholder="e.g. Falcon"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          T-shirt size
+        </label>
+
+        <input
+          id="recordSize"
+          placeholder="e.g. Medium / M"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          T-shirt price (₱) *
+        </label>
+
+        <input
+          id="recordPrice"
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="500"
+        >
+
+      </div>
+
+
+      <div class="field full">
+
+        <label>
+          Amount paid / down payment (₱)
+        </label>
+
+        <input
+          id="recordPaid"
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="250"
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="notice">
+
+      Example: price ₱500 and down payment ₱250
+      will show a ₱250 balance and "Partial payment."
+
+    </div>
+
+
+    <div class="modal-actions">
+
+      <button
+        class="btn btn-outline close-record"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="btn btn-primary"
+        id="saveRecord"
+      >
+        Save record
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+  id="toast"
+  class="toast hidden"
+></div>
+
+
+<!-- =====================================================
+     FIREBASE
+====================================================== -->
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+
+<script>
+
+/* =====================================================
+   FIREBASE CONFIG
+   LEFT EXACTLY AS PROVIDED
+===================================================== */
+
+firebase.initializeApp({
+
+  apiKey: "AIzaSyCtXBrH_48U34jw_KrbAZSCpXTY2qfSqEg",
+
+  authDomain: "areyouatecha.firebaseapp.com",
+
+  projectId: "areyouatecha",
+
+  storageBucket: "areyouatecha.firebasestorage.app",
+
+  messagingSenderId: "628406103719",
+
+  appId: "1:628406103719:web:6d1f336ee0a79e877f3582"
+
+});
+
+
+const auth = firebase.auth();
+
+const db = firebase.firestore();
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let records = [];
+
+let editingId = null;
+
+let toastTimer = null;
+
+
+/* =====================================================
+   HELPER
+===================================================== */
+
+const $ = id => document.getElementById(id);
+
+
+const money = n =>
+  '₱' +
+  Number(n || 0).toLocaleString(
+    'en-PH',
+    {
+      minimumFractionDigits:0,
+      maximumFractionDigits:2
+    }
+  );
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function esc(v){
+
+  return String(v ?? '')
+    .replace(
+      /[&<>"']/g,
+      c => ({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#39;'
+      }[c])
+    );
+
+}
+
+
+/* =====================================================
+   PAYMENT STATE
+===================================================== */
+
+function paymentState(r){
+
+  const price =
+    Number(r.price) || 0;
+
+  const paid =
+    Math.min(
+      Number(r.paid) || 0,
+      price
+    );
+
+  const balance =
+    Math.max(
+      0,
+      price - paid
+    );
+
+  let status;
+
+  if(balance === 0 && price > 0){
+
+    status = 'Paid';
+
+  }
+  else if(paid > 0){
+
+    status = 'Partial';
+
+  }
+  else{
+
+    status = 'Unpaid';
+
+  }
+
+  return {
+    price,
+    paid,
+    balance,
+    status
+  };
+
+}
+
+
+/* =====================================================
+   STATUS BADGE
+===================================================== */
+
+function statusBadge(status){
+
+  if(status === 'Paid'){
+
+    return `
+      <span class="badge paid">
+        ✓ Fully paid
+      </span>
+    `;
+
+  }
+
+
+  if(status === 'Partial'){
+
+    return `
+      <span class="badge partial">
+        ◐ Partial payment
+      </span>
+    `;
+
+  }
+
+
+  return `
+    <span class="badge unpaid">
+      ! Not paid
+    </span>
+  `;
+
+}
+
+
+/* =====================================================
+   RENDER EVERYTHING
+===================================================== */
+
+function render(){
+
+  const q =
+    $('search').value
+      .trim()
+      .toLowerCase();
+
+
+  const matchesSearch = r => {
+
+    if(!q) return true;
+
+    return [
+      r.name,
+      r.group,
+      r.codename,
+      r.size
+    ]
+    .some(
+      v =>
+        String(v || '')
+          .toLowerCase()
+          .includes(q)
+    );
+
+  };
+
+
+  const visible =
+    records.filter(matchesSearch);
+
+
+  /* =========================
+     STATISTICS
+  ========================= */
+
+  const paidCount =
+    records.filter(
+      r =>
+        paymentState(r).status === 'Paid'
+    ).length;
+
+
+  const balanceCount =
+    records.filter(
+      r =>
+        paymentState(r).balance > 0
+    ).length;
+
+
+  const collected =
+    records.reduce(
+      (sum,r) =>
+        sum + paymentState(r).paid,
+      0
+    );
+
+
+  $('totalOrders').textContent =
+    records.length;
+
+
+  $('paidOrders').textContent =
+    paidCount;
+
+
+  $('balanceOrders').textContent =
+    balanceCount;
+
+
+  $('collected').textContent =
+    money(collected);
+
+
+  $('resultCount').textContent =
+    visible.length +
+    ' record' +
+    (visible.length === 1 ? '' : 's');
+
+
+  /* =========================
+     PUBLIC VIEW
+  ========================= */
+
+  $('publicRows').innerHTML =
+    visible.map(r => {
+
+      const s =
+        paymentState(r);
+
+
+      const details = [
+
+        r.group
+          ? 'Group: ' + r.group
+          : '',
+
+        r.codename
+          ? 'Code: ' + r.codename
+          : '',
+
+        r.size
+          ? 'Size: ' + r.size
+          : ''
+
+      ]
+      .filter(Boolean)
+      .join(' · ');
+
+
+      return `
+
+        <tr>
+
+          <td>
+
+            <div class="person">
+              ${esc(r.name)}
+            </div>
+
+            ${
+              details
+              ?
+              `<div class="sub">
+                ${esc(details)}
+              </div>`
+              :
+              ''
+            }
+
+          </td>
+
+
+          <td
+            data-label="Group / code / size"
+            class="sub"
+          >
+            ${esc(details) || '—'}
+          </td>
+
+
+          <td
+            data-label="T-shirt price"
+            class="amount"
+          >
+            ${money(s.price)}
+          </td>
+
+
+          <td
+            data-label="Paid"
+            class="amount"
+          >
+            ${money(s.paid)}
+          </td>
+
+
+          <td
+            data-label="Balance"
+            class="balance"
+          >
+            ${money(s.balance)}
+          </td>
+
+
+          <td
+            data-label="Status"
+          >
+            ${statusBadge(s.status)}
+          </td>
+
+        </tr>
+
+      `;
+
+    })
+    .join('');
+
+
+  $('publicEmpty')
+    .classList
+    .toggle(
+      'hidden',
+      visible.length > 0
+    );
+
+
+  /* =========================
+     ADMIN DESKTOP TABLE
+  ========================= */
+
+  $('adminRows').innerHTML =
+    visible.map(r => {
+
+      const s =
+        paymentState(r);
+
+
+      return `
+
+        <tr>
+
+          <td class="person">
+            ${esc(r.name)}
+          </td>
+
+          <td>
+            ${esc(r.group) || '—'}
+          </td>
+
+          <td>
+            ${esc(r.codename) || '—'}
+          </td>
+
+          <td>
+            ${esc(r.size) || '—'}
+          </td>
+
+          <td>
+            ${money(s.price)}
+          </td>
+
+          <td>
+            ${money(s.paid)}
+          </td>
+
+          <td class="balance">
+            ${money(s.balance)}
+          </td>
+
+
+          <td>
+
+            <div class="admin-actions">
+
+              <button
+                class="icon-btn edit"
+                data-edit="${esc(r.id)}"
+              >
+                Edit
+              </button>
+
+
+              <button
+                class="icon-btn delete"
+                data-delete="${esc(r.id)}"
+              >
+                Delete
+              </button>
+
+            </div>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    })
+    .join('');
+
+
+  /* =========================
+     ADMIN MOBILE CARDS
+     
+     This is the important fix.
+     No horizontal scrolling.
+  ========================= */
+
+  $('adminMobileRows').innerHTML =
+    visible.map(r => {
+
+      const s =
+        paymentState(r);
+
+
+      return `
+
+        <div class="admin-mobile-card">
+
+          <div class="admin-mobile-top">
+
+            <div class="admin-mobile-name">
+              ${esc(r.name)}
+            </div>
+
+            ${statusBadge(s.status)}
+
+          </div>
+
+
+          <div class="admin-mobile-details">
+
+            <div class="admin-detail">
+
+              <span class="admin-detail-label">
+                Group
+              </span>
+
+              <span class="admin-detail-value">
+                ${esc(r.group) || '—'}
+              </span>
+
+            </div>
+
+
+            <div class="admin-detail">
+
+              <span class="admin-detail-label">
+                Codename
+              </span>
+
+              <span class="admin-detail-value">
+                ${esc(r.codename) || '—'}
+              </span>
+
+            </div>
+
+
+            <div class="admin-detail">
+
+              <span class="admin-detail-label">
+                Size
+              </span>
+
+              <span class="admin-detail-value">
+                ${esc(r.size) || '—'}
+              </span>
+
+            </div>
+
+
+            <div class="admin-detail">
+
+              <span class="admin-detail-label">
+                Price
+              </span>
+
+              <span class="admin-detail-value">
+                ${money(s.price)}
+              </span>
+
+            </div>
+
+
+            <div class="admin-detail">
+
+              <span class="admin-detail-label">
+                Paid
+              </span>
+
+              <span class="admin-detail-value">
+                ${money(s.paid)}
+              </span>
+
+            </div>
+
+
+            <div class="admin-detail">
+
+              <span class="admin-detail-label">
+                Balance
+              </span>
+
+              <span class="admin-detail-value">
+                ${money(s.balance)}
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="admin-mobile-actions">
+
+            <button
+              class="icon-btn edit"
+              data-edit="${esc(r.id)}"
+            >
+              ✏️ Edit
+            </button>
+
+
+            <button
+              class="icon-btn delete"
+              data-delete="${esc(r.id)}"
+            >
+              🗑️ Delete
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    })
+    .join('');
+
+
+  /* EMPTY ADMIN */
+
+  $('adminEmpty')
+    .classList
+    .toggle(
+      'hidden',
+      records.length > 0
+    );
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function toast(message){
+
+  $('toast').textContent =
+    message;
+
+  $('toast')
+    .classList
+    .remove('hidden');
+
+
+  clearTimeout(toastTimer);
+
+
+  toastTimer =
+    setTimeout(
+      () =>
+        $('toast')
+          .classList
+          .add('hidden'),
+      3000
+    );
+
+}
+
+
+/* =====================================================
+   OPEN RECORD MODAL
+===================================================== */
+
+function openRecord(record){
+
+  editingId =
+    record?.id || null;
+
+
+  $('recordTitle').textContent =
+    record
+      ? 'Edit payment record'
+      : 'Add payment record';
+
+
+  $('recordName').value =
+    record?.name || '';
+
+
+  $('recordGroup').value =
+    record?.group || '';
+
+
+  $('recordCodename').value =
+    record?.codename || '';
+
+
+  $('recordSize').value =
+    record?.size || '';
+
+
+  $('recordPrice').value =
+    record?.price ?? '';
+
+
+  $('recordPaid').value =
+    record?.paid ?? '';
+
+
+  $('recordModal')
+    .classList
+    .remove('hidden');
+
+
+  setTimeout(
+    () =>
+      $('recordName').focus(),
+    50
+  );
+
+}
+
+
+/* =====================================================
+   SAVE RECORD
+===================================================== */
+
+async function saveRecord(){
+
+  const name =
+    $('recordName')
+      .value
+      .trim();
+
+
+  const group =
+    $('recordGroup')
+      .value
+      .trim();
+
+
+  const codename =
+    $('recordCodename')
+      .value
+      .trim();
+
+
+  const size =
+    $('recordSize')
+      .value
+      .trim();
+
+
+  const price =
+    Number(
+      $('recordPrice').value
+    );
+
+
+  const paid =
+    Number(
+      $('recordPaid').value || 0
+    );
+
+
+  /* VALIDATION */
+
+  if(!name){
+
+    toast(
+      'Please enter a name.'
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !Number.isFinite(price) ||
+    price <= 0
+  ){
+
+    toast(
+      'Enter a valid t-shirt price.'
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !Number.isFinite(paid) ||
+    paid < 0
+  ){
+
+    toast(
+      'Enter a valid paid amount.'
+    );
+
+    return;
+
+  }
+
+
+  if(paid > price){
+
+    toast(
+      'Paid amount cannot be more than the t-shirt price.'
+    );
+
+    return;
+
+  }
+
+
+  const data = {
+
+    name,
+    group,
+    codename,
+    size,
+    price,
+    paid,
+
+    updatedAt:
+      firebase.firestore
+        .FieldValue
+        .serverTimestamp()
+
+  };
+
+
+  try{
+
+    if(editingId){
+
+      await db
+        .collection('tshirtPayments')
+        .doc(editingId)
+        .update(data);
+
+
+      $('recordModal')
+        .classList
+        .add('hidden');
+
+
+      toast(
+        'Record updated.'
+      );
+
+    }
+    else{
+
+      await db
+        .collection('tshirtPayments')
+        .add({
+
+          ...data,
+
+          createdAt:
+            firebase.firestore
+              .FieldValue
+              .serverTimestamp()
+
+        });
+
+
+      $('recordModal')
+        .classList
+        .add('hidden');
+
+
+      toast(
+        'Payment record added.'
+      );
+
+    }
+
+
+    editingId = null;
+
+  }
+  catch(e){
+
+    console.error(e);
+
+    toast(
+      'Could not save: ' +
+      e.message
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   DELETE RECORD
+===================================================== */
+
+async function deleteRecord(id){
+
+  const record =
+    records.find(
+      r => r.id === id
+    );
+
+
+  if(!record){
+
+    toast(
+      'Record not found.'
+    );
+
+    return;
+
+  }
+
+
+  const confirmed =
+    confirm(
+      `Delete the payment record for "${record.name}"?`
+    );
+
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+
+  try{
+
+    await db
+      .collection('tshirtPayments')
+      .doc(id)
+      .delete();
+
+
+    toast(
+      'Record deleted.'
+    );
+
+  }
+  catch(e){
+
+    console.error(e);
+
+    toast(
+      'Could not delete: ' +
+      e.message
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   FIREBASE AUTH STATE
+===================================================== */
+
+auth.onAuthStateChanged(user => {
+
+  if(user){
+
+    $('role').textContent =
+      'Admin';
+
+
+    $('loginBtn')
+      .classList
+      .add('hidden');
+
+
+    $('logoutBtn')
+      .classList
+      .remove('hidden');
+
+
+    $('admin-view')
+      .classList
+      .remove('hidden');
+
+
+    render();
+
+  }
+  else{
+
+    $('role').textContent =
+      'Public view';
+
+
+    $('loginBtn')
+      .classList
+      .remove('hidden');
+
+
+    $('logoutBtn')
+      .classList
+      .add('hidden');
+
+
+    $('admin-view')
+      .classList
+      .add('hidden');
+
+
+    render();
+
+  }
+
+});
+
+
+/* =====================================================
+   FIRESTORE REAL-TIME LISTENER
+===================================================== */
+
+db.collection('tshirtPayments')
+  .onSnapshot(
+    snapshot => {
+
+      records =
+        snapshot.docs
+          .map(doc => ({
+
+            id:doc.id,
+            ...doc.data()
+
+          }))
+          .sort(
+            (a,b) =>
+              String(a.name || '')
+                .localeCompare(
+                  String(b.name || '')
+                )
+          );
+
+
+      render();
+
+    },
+
+    error => {
+
+      console.error(
+        'Firestore error:',
+        error
+      );
+
+
+      toast(
+        'Could not load payment records.'
+      );
+
+    }
+  );
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+$('search')
+  .addEventListener(
+    'input',
+    render
+  );
+
+
+/* =====================================================
+   LOGIN BUTTON
+===================================================== */
+
+$('loginBtn')
+  .addEventListener(
+    'click',
+    () => {
+
+      $('loginEmail').value =
+        '';
+
+      $('loginPassword').value =
+        '';
+
+      $('loginModal')
+        .classList
+        .remove('hidden');
+
+
+      setTimeout(
+        () =>
+          $('loginEmail').focus(),
+        50
+      );
+
+    }
+  );
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+$('loginSubmit')
+  .addEventListener(
+    'click',
+    async () => {
+
+      const email =
+        $('loginEmail')
+          .value
+          .trim();
+
+
+      const password =
+        $('loginPassword')
+          .value;
+
+
+      if(!email){
+
+        toast(
+          'Enter your admin email.'
+        );
+
+        return;
+
+      }
+
+
+      if(!password){
+
+        toast(
+          'Enter your password.'
+        );
+
+        return;
+
+      }
+
+
+      const button =
+        $('loginSubmit');
+
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        'Logging in...';
+
+
+      try{
+
+        await auth
+          .signInWithEmailAndPassword(
+            email,
+            password
+          );
+
+
+        $('loginModal')
+          .classList
+          .add('hidden');
+
+
+        toast(
+          'Welcome, Admin.'
+        );
+
+      }
+      catch(e){
+
+        console.error(e);
+
+        let message =
+          'Login failed.';
+
+
+        if(
+          e.code ===
+          'auth/invalid-credential'
+        ){
+
+          message =
+            'Invalid email or password.';
+
+        }
+        else if(
+          e.code ===
+          'auth/user-not-found'
+        ){
+
+          message =
+            'Admin account not found.';
+
+        }
+        else if(
+          e.code ===
+          'auth/wrong-password'
+        ){
+
+          message =
+            'Incorrect password.';
+
+        }
+        else if(
+          e.code ===
+          'auth/too-many-requests'
+        ){
+
+          message =
+            'Too many attempts. Try again later.';
+
+        }
+        else if(e.message){
+
+          message =
+            e.message;
+
+        }
+
+
+        toast(message);
+
+      }
+      finally{
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          'Log in';
+
+      }
+
+    }
+  );
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+$('logoutBtn')
+  .addEventListener(
+    'click',
+    async () => {
+
+      try{
+
+        await auth.signOut();
+
+        toast(
+          'Logged out.'
+        );
+
+      }
+      catch(e){
+
+        toast(
+          'Could not log out.'
+        );
+
+      }
+
+    }
+  );
+
+
+/* =====================================================
+   ADD RECORD
+===================================================== */
+
+$('addBtn')
+  .addEventListener(
+    'click',
+    () =>
+      openRecord(null)
+  );
+
+
+/* =====================================================
+   EDIT / DELETE BUTTONS
+     
+   Event delegation is used because
+   rows are dynamically generated.
+===================================================== */
+
+document.addEventListener(
+  'click',
+  event => {
+
+    const editButton =
+      event.target.closest(
+        '[data-edit]'
+      );
+
+
+    if(editButton){
+
+      const id =
+        editButton.dataset.edit;
+
+
+      const record =
+        records.find(
+          r => r.id === id
+        );
+
+
+      if(record){
+
+        openRecord(record);
+
+      }
+
+
+      return;
+
+    }
+
+
+    const deleteButton =
+      event.target.closest(
+        '[data-delete]'
+      );
+
+
+    if(deleteButton){
+
+      deleteRecord(
+        deleteButton.dataset.delete
+      );
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   CLOSE LOGIN MODAL
+===================================================== */
+
+document
+  .querySelectorAll('.close-modal')
+  .forEach(button => {
+
+    button.addEventListener(
+      'click',
+      () => {
+
+        $('loginModal')
+          .classList
+          .add('hidden');
+
+      }
+    );
+
+  });
+
+
+/* =====================================================
+   CLOSE RECORD MODAL
+===================================================== */
+
+document
+  .querySelectorAll('.close-record')
+  .forEach(button => {
+
+    button.addEventListener(
+      'click',
+      () => {
+
+        $('recordModal')
+          .classList
+          .add('hidden');
+
+
+        editingId =
+          null;
+
+      }
+    );
+
+  });
+
+
+/* =====================================================
+   SAVE RECORD
+===================================================== */
+
+$('saveRecord')
+  .addEventListener(
+    'click',
+    saveRecord
+  );
+
+
+/* =====================================================
+   ENTER KEY FOR LOGIN
+===================================================== */
+
+$('loginPassword')
+  .addEventListener(
+    'keydown',
+    event => {
+
+      if(
+        event.key ===
+        'Enter'
+      ){
+
+        $('loginSubmit')
+          .click();
+
+      }
+
+    }
+  );
+
+
+/* =====================================================
+   ENTER KEY IN RECORD FORM
+===================================================== */
+
+[
+  'recordName',
+  'recordGroup',
+  'recordCodename',
+  'recordSize',
+  'recordPrice',
+  'recordPaid'
+]
+.forEach(id => {
+
+  $(id)
+    .addEventListener(
+      'keydown',
+      event => {
+
+        if(
+          event.key ===
+          'Enter'
+        ){
+
+          event.preventDefault();
+
+          saveRecord();
+
+        }
+
+      }
+    );
+
+});
+
+
+/* =====================================================
+   CLOSE MODALS WHEN CLICKING BACKDROP
+===================================================== */
+
+$('loginModal')
+  .addEventListener(
+    'click',
+    event => {
+
+      if(
+        event.target ===
+        $('loginModal')
+      ){
+
+        $('loginModal')
+          .classList
+          .add('hidden');
+
+      }
+
+    }
+  );
+
+
+$('recordModal')
+  .addEventListener(
+    'click',
+    event => {
+
+      if(
+        event.target ===
+        $('recordModal')
+      ){
+
+        $('recordModal')
+          .classList
+          .add('hidden');
+
+
+        editingId =
+          null;
+
+      }
+
+    }
+  );
+
+
+/* =====================================================
+   ESC KEY CLOSE MODALS
+===================================================== */
+
+document.addEventListener(
+  'keydown',
+  event => {
+
+    if(
+      event.key ===
+      'Escape'
+    ){
+
+      $('loginModal')
+        .classList
+        .add('hidden');
+
+
+      $('recordModal')
+        .classList
+        .add('hidden');
+
+
+      editingId =
+        null;
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   INITIAL RENDER
+===================================================== */
+
+render();
+
+</script>
+
 </body>
 </html>
